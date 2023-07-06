@@ -514,13 +514,13 @@ void displayMenu1(int librarySize, string artists[], string titles[], string gen
 void displayMenu2(int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
     int option1, option2, option3, songID, playlistID;
     string newName;
-    cout << "Open an existing playlist \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n4. Go back";
+    cout << " \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n4. Go back";
     cin >> option1;
     switch (option1) {
         case 1:
-            cout << "Select a playlist:";
-            for(int i=0; i<numPlaylists; i++) {
-                cout << i+1 << ". " << playlists[i];
+            cout << "Select a playlist:\n";
+            for (int i = 0; i < numPlaylists; i++) {
+                cout << i + 1 << ". " << playlistNames[i] << endl;
             }
             cin >> playlistID;
             cout << "Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n4. Swap the position of two songs in your playlist \n 5. Move a song to a new position in your playlist \n 6. Print your playlist 7. Go Back";
