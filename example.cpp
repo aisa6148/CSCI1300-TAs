@@ -407,7 +407,7 @@ int FindSongID(string artists[], string titles[], string genres[], int librarySi
 void PrintSpotify(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
                   string urls[])
 {
-    for (int i = 0; i < MAX_SONGS; i++)
+    for (int i = 0; i < numPlaylists; i++)
     {
         if (playlists[playlistID][i] >= 0)
         {
@@ -418,7 +418,7 @@ void PrintSpotify(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
 void PrintPlaylist(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
                    string artists[], string titles[])
 {
-    for (int i = 0; i < MAX_SONGS; i++)
+    for (int i = 0; i < numPlaylists; i++)
     {
         if (playlists[playlistID][i] >= 0)
         {
@@ -514,7 +514,7 @@ void displayMenu1(int librarySize, string artists[], string titles[], string gen
 void displayMenu2(int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
     int option1, option2, option3, songID, playlistID;
     string newName;
-    cout << " \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n4. Go back";
+    cout << " \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n3. Go back";
     cin >> option1;
     switch (option1) {
         case 1:
@@ -523,9 +523,10 @@ void displayMenu2(int librarySize, string artists[], string titles[], string gen
                 cout << i + 1 << ". " << playlistNames[i] << endl;
             }
             cin >> playlistID;
-            cout << "Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n4. Swap the position of two songs in your playlist \n 5. Move a song to a new position in your playlist \n 6. Print your playlist 7. Go Back";
+            cout << "Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist 6. Go Back";
             cin >> option2;
             displayMenu4(option2, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
+            displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
             break;
         case 2:
             cout << "Enter name of your new playlist:";
@@ -534,6 +535,10 @@ void displayMenu2(int librarySize, string artists[], string titles[], string gen
             cout << "Create a new playlist. \n Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist 6. Go Back";
             cin >> option3;
             displayMenu5(option3, numPlaylists-1, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
+            displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+        case 3:
+            displayMenu1(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
             break;
         default:
             displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
@@ -616,10 +621,13 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
                     displayMenu4(option2, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
                     break;
             }
-        default:
+            break;
+        case 6:
             displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
             break;
-
+        default:
+            displayMenu4(option2, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);            
+            break;
     }
 }
 
@@ -657,6 +665,7 @@ void displayMenu5(int option3, int playlistID, string artists[], string titles[]
             cin >> option;
             switch (option) {
                 case 1: 
+                    cout << artists->length() << titles->length();
                     PrintPlaylist(numPlaylists, playlists, playlistID, artists, titles);
                     break;
                 case 2:
@@ -669,8 +678,11 @@ void displayMenu5(int option3, int playlistID, string artists[], string titles[]
                     displayMenu5(option3, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
                     break;
             }
-        default:
+        case 6:
             displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+        default:
+            displayMenu5(option3, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
             break;
 
     }
