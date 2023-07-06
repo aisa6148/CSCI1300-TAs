@@ -546,32 +546,63 @@ void displayMenu2(int librarySize, string artists[], string titles[], string gen
     }
 }
 
-void displayMenu3 (int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
-    int option, loc;
+void displayMenu3 (int libSize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
+    int option; 
+    string loc;
     cout << "Select an option:\n 1. Save and quit \n 2. Quit without saving \n 3. Go back";
     cin >> option;
-    switch (option) {
+        switch (option) {
         case 1:
-            cout << "Would you like to save the library to the current location? Y/N";
+            cout << "Would you like to save the library to the current location? Y/N: ";
             cin >> loc;
-            if (loc == 'Y' || loc == 'y') {
-                //niharika
+            if (loc == "Y" || loc == "y") {
+                // Use the library file that you opened earlier
+                SaveChanges(DEFAULT_LIBRARY_FILE, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
+            } else if (loc == "N" || loc == "n") {
+                cout << "Enter the new save location for the library: ";
+                cin >> loc;
+                // Call SaveChanges with the new library file location
+                SaveChanges(loc, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
             } else {
-                //niharika
+                cout << "Invalid option. Library will not be saved." << endl;
             }
-            cout << "Would you like to save the playlists to the current location? Y/N";
-            if (loc == 'Y' || loc == 'y') {
-                //niharika
+
+            cout << "Would you like to save the playlists to the current location? Y/N: ";
+            cin >> loc;
+            if (loc == "Y" || loc == "y") {
+                // Use the playlist file that you opened earlier
+                SaveChanges(DEFAULT_LIBRARY_FILE, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
+            } else if (loc == "N" || loc == "n") {
+                cout << "Enter the new save location for the playlists: ";
+                cin >> loc;
+                // Call SaveChanges with the new playlist file location
+                SaveChanges(DEFAULT_LIBRARY_FILE, loc, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
             } else {
-                //niharika
+                cout << "Invalid option. Playlists will not be saved." << endl;
             }
+
             break;
         case 2:
-            break;
+            return;
         default:
-            displayMainMenu(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            int op;
+            cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
+            cin >> op;
+            switch (op) {
+                case 1:
+                    displayMenu1(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 2:
+                    displayMenu2(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 3:
+                    displayMenu3(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                default: 
+                    displayMainMenu(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+            }
             break;
-
     }
 }
 
