@@ -11,8 +11,8 @@ const int MAX_PLAYLISTS = 20;
 const string DEFAULT_LIBRARY_FILE = "musiclibrary.tsv";
 const string DEFAULT_PLAYLIST_FILE = "musicplaylists.txt";
 
-int librarySize = 0;      // number of songs in the library
-int numPlaylists = 0;     // number of playlists
+int librarySize = -1;      // number of songs in the library
+int numPlaylists = -1;     // number of playlists
 string artists[MAX_SONGS]; // will be an array to store the artist names for all the songs in your library;
 string titles[MAX_SONGS];  // will be an array to store the titles of all the songs in your library.
 string genres[MAX_SONGS];  // will be an array to store the genres of all the songs in your library.
@@ -154,16 +154,19 @@ int NewPlaylist(int numPlaylists, string playlistNames[], string newName)
 int AddSongLibrary(int librarySize, string newArtist, string newTitle, string newGenre, string newURL,
                    string artists[], string titles[], string genres[], string urls[])
 {
+    cout << librarySize;
     if (librarySize < MAX_SONGS)
     {
         artists[librarySize] = newArtist;
         titles[librarySize] = newTitle;
         genres[librarySize] = newGenre;
         urls[librarySize] = newURL;
+        cout << librarySize + 1 << artists[0];
         return librarySize + 1;
     }
     else
     {
+        cout << librarySize;
         return librarySize;
     }
 }
@@ -175,9 +178,10 @@ bool AddSongPlaylist(int numPlaylists, int playlists[][MAX_SONGS], int songID, i
     }
     for (int i = 0; i < MAX_SONGS; i++)
     {
-        if (playlists[playlistID][i] == -1)
+        if (playlists[playlistID][i] == 0)
         {
             playlists[playlistID][i] = songID;
+            cout<<playlists[playlistID][i];
             return true;
         }
     }
@@ -258,7 +262,10 @@ bool SwapSongs(int numPlaylists, int playlists[][MAX_SONGS], int songID1,
     if (pos1 < MAX_SONGS && pos2 < MAX_SONGS)
     {
         playlists[playlistID][pos1] = songID2;
+        cout<<playlists[playlistID][pos1];
         playlists[playlistID][pos2] = songID1;
+        cout<<playlists[playlistID][pos2];
+
         return true;
     }
     return false;
@@ -349,6 +356,7 @@ int FindSongID(string artists[], string titles[], string genres[], int librarySi
     case 'A':
         cout << "What artist would you like to search for?" << endl;
         getline(cin, userSearch);
+        cout << artists[0];
         for (int i = 0; i < librarySize; i++)
         {
             if (IsMatch(userSearch, artists[i]))
@@ -407,7 +415,7 @@ int FindSongID(string artists[], string titles[], string genres[], int librarySi
 void PrintSpotify(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
                   string urls[])
 {
-    for (int i = 0; i < numPlaylists; i++)
+    for (int i = 0; i < MAX_SONGS; i++)
     {
         if (playlists[playlistID][i] >= 0)
         {
@@ -418,7 +426,7 @@ void PrintSpotify(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
 void PrintPlaylist(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
                    string artists[], string titles[])
 {
-    for (int i = 0; i < numPlaylists; i++)
+    for (int i = 0; i < MAX_SONGS; i++)
     {
         if (playlists[playlistID][i] >= 0)
         {
@@ -523,7 +531,7 @@ void displayMenu2(int librarySize, string artists[], string titles[], string gen
                 cout << i + 1 << ". " << playlistNames[i] << endl;
             }
             cin >> playlistID;
-            cout << "Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist 6. Go Back";
+            cout << "Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n4. Move a song to a new position in your playlist \n5. Print your playlist \n6. Go Back";
             cin >> option2;
             displayMenu4(option2, playlistID, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
             displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
@@ -532,7 +540,7 @@ void displayMenu2(int librarySize, string artists[], string titles[], string gen
             cout << "Enter name of your new playlist:";
             cin >> newName;
             numPlaylists = NewPlaylist(numPlaylists, playlistNames, newName);
-            cout << "Create a new playlist. \n Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist 6. Go Back";
+            cout << "Create a new playlist. \n Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist \n6. Go Back";
             cin >> option3;
             displayMenu5(option3, numPlaylists-1, artists, titles, genres, urls, librarySize, playlists, numPlaylists, playlistNames);
             displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
@@ -612,6 +620,7 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
     int newLocation;
     switch (option2) {
         case 1:
+            cout<<artists[0];
             songID = FindSongID(artists, titles, genres, librarySize);
             AddSongPlaylist(numPlaylists, playlists, songID, playlistID);
             break;
@@ -640,6 +649,7 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
             cin >> option;
             switch (option) {
                 case 1: 
+                    cout << artists->length() << titles->length();
                     PrintPlaylist(numPlaylists, playlists, playlistID, artists, titles);
                     break;
                 case 2:
