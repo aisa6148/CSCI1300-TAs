@@ -1,7 +1,12 @@
 #include <iostream>
+#include <string>
 #include <fstream>
 #include <cmath>
 #include <cstdlib>
+//#include<menu.h>
+
+
+
 #define stringstream DO_NOT_USE_STRINGSTREAM
 #define vector DO_NOT_USE_VECTORS
 using namespace std;
@@ -9,6 +14,14 @@ const int MAX_SONGS = 1000;
 const int MAX_PLAYLISTS = 20;
 const string DEFAULT_LIBRARY_FILE = "musiclibrary.tsv";
 const string DEFAULT_PLAYLIST_FILE = "musicplaylists.txt";
+
+void displayMenu1(int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
+void displayMenu2(int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
+void displayMenu3 (int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
+void displayMenu4(int, int, string[], string[], string[], string[], int, int[][MAX_SONGS], int, string[]);
+void displayMenu5(int, int, string[], string[], string[], string[], int, int[][MAX_SONGS], int, string[]);
+void displayMainMenu(int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
+
 
 int Split(string line, char delim, string arr[], int size)
 {
@@ -292,97 +305,88 @@ bool MoveSong(int numPlaylists, int playlists[][MAX_SONGS], int songID,
     return false;
 }
 
-bool IsMatch(string small, string big)
-{
+bool IsMatch(string small, string big){
     bool match = false;
-    if (big.length() < small.length())
-        return false;
-    for (int i = 0; i < big.length() - small.length() + 1; i++)
-    {
-        if (small == big.substr(i, small.length()))
-        {
+    if (big.length() < small.length()) return false;
+    for (int i = 0; i < big.length()-small.length()+1; i++){
+        if (small == big.substr(i, small.length())){
             match = true;
         }
     }
     return match;
 }
-int FindSongID(string artists[], string titles[], string genres[], int librarySize)
-{
-    // declare variables
+int FindSongID(string artists[], string titles[], string genres[], int librarySize){
+    //declare variables
     char userChoice;
     int songID;
     int matches[MAX_SONGS];
     string userSearch;
     int numMatches = 0;
+
     cout << "Would you like to search by artist (A), title (T), or genre (G)?" << endl;
     cin >> userChoice;
-    while (userChoice != 'A' && userChoice != 'T' && userChoice != 'G')
-    {
+
+    while (userChoice != 'A' && userChoice != 'T' && userChoice != 'G'){
         cout << "Invalid choice." << endl;
         cout << "Would you like to search by artist (A), title (T), or genre (G)?" << endl;
         cin >> userChoice;
     }
-
+    
     cin.ignore();
-    switch (userChoice)
-    {
-    case 'A':
-        cout << "What artist would you like to search for?" << endl;
-        getline(cin, userSearch);
-        for (int i = 0; i < librarySize; i++)
-        {
-            if (IsMatch(userSearch, artists[i]))
-            {
-                matches[numMatches] = i;
-                numMatches++;
-                cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
-            }
-        }
-        break;
-    case 'T':
-        cout << "What title would you like to search for?" << endl;
-        getline(cin, userSearch);
-        for (int i = 0; i < librarySize; i++)
-        {
-            if ((IsMatch(userSearch, titles[i])))
-            {
-                matches[numMatches] = i;
-                numMatches++;
-                cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
-            }
-        }
-        break;
-    case 'G':
-        cout << "What genre would you like to search for?" << endl;
-        getline(cin, userSearch);
 
-        for (int i = 0; i < librarySize; i++)
-        {
-            if (IsMatch(userSearch, genres[i]))
-            {
-                matches[numMatches] = i;
-                numMatches++;
-                cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
+    switch(userChoice){
+        case 'A':
+            cout << "What artist would you like to search for?" << endl;
+            getline(cin, userSearch);
+            for (int i = 0; i < librarySize; i++){
+                if (IsMatch(userSearch, artists[i])){
+                    matches[numMatches] = i;
+                    numMatches++;
+                    cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
+                }
             }
-        }
+            break;
+
+        case 'T':
+            cout << "What title would you like to search for?" << endl;
+            getline(cin, userSearch);
+
+            for (int i = 0; i < librarySize; i++){
+                if ((IsMatch(userSearch, titles[i]))){
+                    matches[numMatches] = i;
+                    numMatches++;
+                    cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
+                }
+            }
+            break;
+
+        case 'G':
+            cout << "What genre would you like to search for?" << endl;
+            getline(cin, userSearch);
+            
+            for (int i = 0; i < librarySize; i++){
+                if (IsMatch(userSearch, genres[i])){
+                    matches[numMatches] = i;
+                    numMatches++;
+                    cout << numMatches << ": \"" << titles[i] << "\" by " << artists[i] << endl;
+                }
+            }
     }
-
-    if (numMatches < 1)
-    {
+    
+    if (numMatches < 1){
         cout << "No matches found." << endl;
         return -1;
     }
+
     cout << "Which number song is your choice? If none of the above, enter -1." << endl;
     cin >> songID;
-    while (songID < -1 || songID > numMatches)
-    {
+    while (songID < -1 || songID > numMatches){
         cout << "Invalid choice." << endl;
         cout << "Which number song is your choice?" << endl;
         cin >> songID;
     }
-    if (songID == -1)
-        return -1;
-    return matches[songID - 1];
+    if (songID == -1) return -1;
+    return matches[songID-1];
 }
 void PrintSpotify(int numPlaylists, int playlists[][MAX_SONGS], int playlistID,
                   string urls[])
@@ -431,28 +435,8 @@ void SaveChanges(string libraryFile, string playlistFile, int librarySize, int n
     }
 }
 
-void displayMainMenu(int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
-    int option;
-    cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
-    cin >> option;
-    switch (option) {
-        case 1:
-            displayMenu1(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
-            break;
-        case 2:
-            displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
-            break;
-        case 3:
-            displayMenu3(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
-            break;
-        default: 
-            displayMainMenu(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
-            break;
-    }
-}
-
 void displayMenu1(int libSize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
-    int option, songID;
+    int option, songID, s;
     string newName, newTitle, newGenre, newURL;
     cout << "Select an option: \n1. Add a song to your library \n2. Remove a song from your library \n3. Search your library \n4. Go back";
     cin >> option;
@@ -466,7 +450,13 @@ void displayMenu1(int libSize, string artists[], string titles[], string genres[
             cin >> newGenre;
             cout << "What is the spotify URL?";
             cin >> newURL;
-            AddSongLibrary(libSize, newName, newTitle, newGenre, newURL, artists, titles, genres, urls);
+            s = AddSongLibrary(libSize, newName, newTitle, newGenre, newURL, artists, titles, genres, urls);
+            cout<< s << libSize;
+            if (s>libSize) {
+                cout <<"song added\n";
+                displayMenu1(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+
+            }
             break;
         case 2:
             songID = FindSongID(artists, titles, genres, libSize);
@@ -476,12 +466,28 @@ void displayMenu1(int libSize, string artists[], string titles[], string genres[
             FindSongID(artists, titles, genres, libSize);
             break;
         default: 
-            displayMainMenu(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            int op;
+            cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
+            cin >> op;
+            switch (op) {
+                case 1:
+                    displayMenu1(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 2:
+                    displayMenu2(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 3:
+                    displayMenu3(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                default: 
+                    displayMainMenu(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+            }
             break;
     }
 }
 
-void displayMenu2(int libSize, string artists[], string titles[], string genres[], string urls, int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
+void displayMenu2(int libSize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
     int option1, option2, option3, songID, playlistID;
     string newName;
     cout << "Open an existing playlist \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n4. Go back";
@@ -503,7 +509,7 @@ void displayMenu2(int libSize, string artists[], string titles[], string genres[
             numPlaylists = NewPlaylist(numPlaylists, playlistNames, newName);
             cout << "Create a new playlist. \n Select an option: \n1. Add a song to your playlist \n2. Remove a song from your playlist. \n3. Swap the position of two songs in your playlist \n 4. Move a song to a new position in your playlist \n 5. Print your playlist 6. Go Back";
             cin >> option3;
-            displayMenu5(option3, numPlaylists-1, artists, titles, genres, urls, libSize, playlists, numPlaylists, playlistNames);
+            displayMenu5(option3, (numPlaylists - 1), artists, titles, genres, urls, libSize, playlists, numPlaylists, playlistNames);
             break;
         default:
             displayMenu2(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
@@ -512,31 +518,62 @@ void displayMenu2(int libSize, string artists[], string titles[], string genres[
 }
 
 void displayMenu3 (int libSize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
-    int option, loc;
+    int option; 
+    string loc;
     cout << "Select an option:\n 1. Save and quit \n 2. Quit without saving \n 3. Go back";
     cin >> option;
-    switch (option) {
+        switch (option) {
         case 1:
-            cout << "Would you like to save the library to the current location? Y/N";
+            cout << "Would you like to save the library to the current location? Y/N: ";
             cin >> loc;
-            if (loc == 'Y' || loc == 'y') {
-                //niharika
+            if (loc == "Y" || loc == "y") {
+                // Use the library file that you opened earlier
+                SaveChanges(DEFAULT_LIBRARY_FILE, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
+            } else if (loc == "N" || loc == "n") {
+                cout << "Enter the new save location for the library: ";
+                cin >> loc;
+                // Call SaveChanges with the new library file location
+                SaveChanges(loc, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
             } else {
-                //niharika
+                cout << "Invalid option. Library will not be saved." << endl;
             }
-            cout << "Would you like to save the playlists to the current location? Y/N";
-            if (loc == 'Y' || loc == 'y') {
-                //niharika
+
+            cout << "Would you like to save the playlists to the current location? Y/N: ";
+            cin >> loc;
+            if (loc == "Y" || loc == "y") {
+                // Use the playlist file that you opened earlier
+                SaveChanges(DEFAULT_LIBRARY_FILE, DEFAULT_PLAYLIST_FILE, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
+            } else if (loc == "N" || loc == "n") {
+                cout << "Enter the new save location for the playlists: ";
+                cin >> loc;
+                // Call SaveChanges with the new playlist file location
+                SaveChanges(DEFAULT_LIBRARY_FILE, loc, libSize, numPlaylists, artists, titles, genres, urls, playlists, playlistNames);
             } else {
-                //niharika
+                cout << "Invalid option. Playlists will not be saved." << endl;
             }
+
             break;
         case 2:
-            return 0;
+            return;
         default:
-            displayMainMenu(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            int op;
+            cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
+            cin >> op;
+            switch (op) {
+                case 1:
+                    displayMenu1(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 2:
+                    displayMenu2(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                case 3:
+                    displayMenu3(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+                default: 
+                    displayMainMenu(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+                    break;
+            }
             break;
-
     }
 }
 
@@ -565,7 +602,7 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
             if (pos == "end") {
                 newLocation = MAX_SONGS;
             } else {
-                newLocation = (int) pos;
+                newLocation = std::stoi(pos);
             }
             MoveSong(numPlaylists, playlists, songID, playlistID, newLocation);
             break;
@@ -613,17 +650,17 @@ void displayMenu5(int option3, int playlistID, string artists[], string titles[]
             break;
         case 4:
             songID = FindSongID(artists, titles, genres, libSize);
-            cout << "Enter a numerical position or the word 'end' to add to the end of the playlist.";
+            cout << "Enter a numerical position or the word 'end' to add to the end of the playlist: ";
             getline(cin, pos);
             if (pos == "end") {
                 newLocation = MAX_SONGS;
             } else {
-                newLocation = (int) pos;
+                newLocation = std::stoi(pos);
             }
             MoveSong(numPlaylists, playlists, songID, playlistID, newLocation);
             break;
         case 5:
-            cout << "Select an option: \n1. Print by artists/titles \n2. Print Spotify Playlist \n3. Go Back";
+            cout << "Select an option:\n1. Print by artists/titles\n2. Print Spotify Playlist\n3. Go Back" << endl;
             cin >> option;
             switch (option) {
                 case 1: 
@@ -642,21 +679,41 @@ void displayMenu5(int option3, int playlistID, string artists[], string titles[]
         default:
             displayMenu2(libSize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
             break;
-
     }
 }
 
-int main()
-{
-    int librarySize = -1;      // number of songs in the library
-    int numPlaylists = -1;     // number of playlists
-    string artists[MAX_SONGS]; // will be an array to store the artist names for all the songs in your library;
-    string titles[MAX_SONGS];  // will be an array to store the titles of all the songs in your library.
-    string genres[MAX_SONGS];  // will be an array to store the genres of all the songs in your library.
-    string urls[MAX_SONGS];    // will be an array to store the spotify URLS for all the songs in your library.
+void displayMainMenu(int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
+    int option;
+    cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
+    cin >> option;
+    switch (option) {
+        case 1:
+            displayMenu1(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+        case 2:
+            displayMenu2(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+        case 3:
+            displayMenu3(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+        default: 
+            displayMainMenu(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+            break;
+    }
+}
+
+
+int main() {
+    int librarySize = -1;        // number of songs in the library
+    int numPlaylists = -1;       // number of playlists
+    string artists[MAX_SONGS];   // will be an array to store the artist names for all the songs in your library;
+    string titles[MAX_SONGS];    // will be an array to store the titles of all the songs in your library.
+    string genres[MAX_SONGS];    // will be an array to store the genres of all the songs in your library.
+    string urls[MAX_SONGS];      // will be an array to store the Spotify URLs for all the songs in your library.
     string playlistNames[MAX_PLAYLISTS];
-    int playlists[MAX_PLAYLISTS][MAX_SONGS];
-// Create variables
+    int playlistsArr[MAX_PLAYLISTS][MAX_SONGS];
+
+    // Create variables
     string libraryFile = DEFAULT_LIBRARY_FILE;
     string playlistFile = DEFAULT_PLAYLIST_FILE;
 
@@ -687,10 +744,6 @@ int main()
     library.close();
 
     // Call the ReadLibrary function
-    string artists[MAX_SONGS];
-    string titles[MAX_SONGS];
-    string genres[MAX_SONGS];
-    string urls[MAX_SONGS];
     int numSongs = ReadLibrary(libraryFile, artists, titles, genres, urls);
 
     // Ask if the user wants to open the default playlist file
@@ -710,23 +763,21 @@ int main()
     }
 
     // Attempt to open the playlist file and create it if it doesn't exist
-    ifstream playlists(playlistFile);
-    if (!playlists.is_open()) {
+    ifstream playlistFileInput(playlistFile);
+    if (!playlistFileInput.is_open()) {
         ofstream createPlaylists(playlistFile);
         createPlaylists.close();
-        playlists.open(playlistFile);
+        playlistFileInput.open(playlistFile);
     }
-    playlists.close();
+    playlistFileInput.close();
 
     // Call the ReadPlaylists function
-    int playlistsArr[MAX_PLAYLISTS][MAX_SONGS];
-    string playlistNames[MAX_PLAYLISTS];
-    int numPlaylists = ReadPlaylists(playlistFile, playlistsArr, playlistNames);
+    numPlaylists = ReadPlaylists(playlistFile, playlistsArr, playlistNames);
 
     // Print confirmation statement
     cout << "Library and playlists loaded." << endl;
 
-    displayMainMenu(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
+    displayMainMenu(librarySize, artists, titles, genres, urls, playlistsArr, numPlaylists, playlistNames);
 
     return 0;
 }
