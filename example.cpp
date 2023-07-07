@@ -11,8 +11,8 @@ const int MAX_PLAYLISTS = 20;
 const string DEFAULT_LIBRARY_FILE = "musiclibrary.tsv";
 const string DEFAULT_PLAYLIST_FILE = "musicplaylists.txt";
 
-int librarySize = -1;      // number of songs in the library
-int numPlaylists = -1;     // number of playlists
+int librarySize = 0;      // number of songs in the library
+int numPlaylists = 0;     // number of playlists
 string artists[MAX_SONGS]; // will be an array to store the artist names for all the songs in your library;
 string titles[MAX_SONGS];  // will be an array to store the titles of all the songs in your library.
 string genres[MAX_SONGS];  // will be an array to store the genres of all the songs in your library.
@@ -161,7 +161,6 @@ int AddSongLibrary(int librarySize, string newArtist, string newTitle, string ne
         titles[librarySize] = newTitle;
         genres[librarySize] = newGenre;
         urls[librarySize] = newURL;
-        cout << librarySize + 1 << artists[0];
         return librarySize + 1;
     }
     else
@@ -356,7 +355,6 @@ int FindSongID(string artists[], string titles[], string genres[], int librarySi
     case 'A':
         cout << "What artist would you like to search for?" << endl;
         getline(cin, userSearch);
-        cout << artists[0];
         for (int i = 0; i < librarySize; i++)
         {
             if (IsMatch(userSearch, artists[i]))
@@ -499,7 +497,6 @@ void displayMenu1(int librarySize, string artists[], string titles[], string gen
                 librarySize = s;
                 cout << "\nSong added.\n";
                 displayMenu1(librarySize, artists, titles, genres, urls, playlists, numPlaylists, playlistNames);
-
             } else {
                 cout << "There is a problem in adding the song";
             }
@@ -521,7 +518,7 @@ void displayMenu1(int librarySize, string artists[], string titles[], string gen
 
 void displayMenu2(int librarySize, string artists[], string titles[], string genres[], string urls[], int playlists[][MAX_SONGS], int numPlaylists, string playlistNames[]) {
     int option1, option2, option3, songID, playlistID;
-    string newName;
+    string newName; 
     cout << " \n Select an option: \n1. Open an existing playlist \n2. Create a new playlist. \n3. Go back";
     cin >> option1;
     switch (option1) {
@@ -637,10 +634,13 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
             songID = FindSongID(artists, titles, genres, librarySize);
             cout << "Enter a numerical position or the word 'end' to add to the end of the playlist.";
             getline(cin, pos);
+            cout<<pos;
             if (pos == "end") {
                 newLocation = MAX_SONGS;
+                cout << stoi(pos);
             } else {
                 newLocation = stoi(pos);
+                cout << stoi(pos);
             }
             MoveSong(numPlaylists, playlists, songID, playlistID, newLocation);
             break;
