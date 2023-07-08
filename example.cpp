@@ -11,17 +11,7 @@ const int MAX_PLAYLISTS = 20;
 const string DEFAULT_LIBRARY_FILE = "musiclibrary.tsv";
 const string DEFAULT_PLAYLIST_FILE = "musicplaylists.txt";
 
-int librarySize = 0;      // number of songs in the library
-int numPlaylists = 0;     // number of playlists
-string artists[MAX_SONGS]; // will be an array to store the artist names for all the songs in your library;
-string titles[MAX_SONGS];  // will be an array to store the titles of all the songs in your library.
-string genres[MAX_SONGS];  // will be an array to store the genres of all the songs in your library.
-string urls[MAX_SONGS];    // will be an array to store the spotify URLS for all the songs in your library.
-string playlistNames[MAX_PLAYLISTS];
-int playlists[MAX_PLAYLISTS][MAX_SONGS];
-// Create variables
-string libraryFile = DEFAULT_LIBRARY_FILE;
-string playlistFile = DEFAULT_PLAYLIST_FILE;
+
 
 void displayMainMenu(int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
 void displayMenu1(int, string[], string[], string[], string[], int[][MAX_SONGS], int, string[]);
@@ -154,7 +144,6 @@ int NewPlaylist(int numPlaylists, string playlistNames[], string newName)
 int AddSongLibrary(int librarySize, string newArtist, string newTitle, string newGenre, string newURL,
                    string artists[], string titles[], string genres[], string urls[])
 {
-    cout << librarySize;
     if (librarySize < MAX_SONGS)
     {
         artists[librarySize] = newArtist;
@@ -588,7 +577,7 @@ void displayMenu3 (int libSize, string artists[], string titles[], string genres
 
             break;
         case 2:
-            return;
+            abort();
         default:
             int op;
             cout << "Select an option \n 1. Access Music Library \n 2. Access Playlists \n 3. Quit";
@@ -634,13 +623,10 @@ void displayMenu4(int option2, int playlistID, string artists[], string titles[]
             songID = FindSongID(artists, titles, genres, librarySize);
             cout << "Enter a numerical position or the word 'end' to add to the end of the playlist.";
             getline(cin, pos);
-            cout<<pos;
             if (pos == "end") {
                 newLocation = MAX_SONGS;
-                cout << stoi(pos);
             } else {
                 newLocation = stoi(pos);
-                cout << stoi(pos);
             }
             MoveSong(numPlaylists, playlists, songID, playlistID, newLocation);
             break;
@@ -731,7 +717,17 @@ void displayMenu5(int option3, int playlistID, string artists[], string titles[]
 
 int main()
 {
-
+int librarySize = 0;      // number of songs in the library
+int numPlaylists = 0;     // number of playlists
+string artists[MAX_SONGS]; // will be an array to store the artist names for all the songs in your library;
+string titles[MAX_SONGS];  // will be an array to store the titles of all the songs in your library.
+string genres[MAX_SONGS];  // will be an array to store the genres of all the songs in your library.
+string urls[MAX_SONGS];    // will be an array to store the spotify URLS for all the songs in your library.
+string playlistNames[MAX_PLAYLISTS];
+int playlists[MAX_PLAYLISTS][MAX_SONGS];
+// Create variables
+string libraryFile = DEFAULT_LIBRARY_FILE;
+string playlistFile = DEFAULT_PLAYLIST_FILE;
 
     // Ask if the user wants to open the default library file
     cout << "Would you like to open the default library? Y/N" << endl;
